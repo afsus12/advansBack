@@ -37,7 +37,7 @@ public class AuthenticationController {
     }
 
     }
-    @PostMapping("/client/signin")
+        @PostMapping("/client/signin")
     public ResponseEntity<?> authenticateClient(@Valid @RequestBody LoginRequest loginRequest) {
 
         try {
@@ -47,7 +47,7 @@ public class AuthenticationController {
         }
     }
 
-    @PostMapping("/cc/signup")
+        @PostMapping("/cc/signup")
     public ResponseEntity<?> registerStaff(@Valid @RequestBody CcSignUpRequest signUpRequest) {
 
         return ResponseEntity.ok(service.registerStaff(signUpRequest));

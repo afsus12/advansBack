@@ -12,6 +12,7 @@ import java.util.List;
 
 @Data
 @Builder
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter

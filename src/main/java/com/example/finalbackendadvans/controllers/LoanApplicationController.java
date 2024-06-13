@@ -1,7 +1,9 @@
 package com.example.finalbackendadvans.controllers;
 
 
+import com.example.finalbackendadvans.dto.ClientResponseDTO;
 import com.example.finalbackendadvans.dto.LoanApplicationDTO;
+import com.example.finalbackendadvans.dto.LonaApplicationDetailsDTO;
 import com.example.finalbackendadvans.entities.Client.Client;
 import com.example.finalbackendadvans.entities.Client.LoanApplication;
 import com.example.finalbackendadvans.entities.Staff;
@@ -24,7 +26,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/v1/staff/loanapp")
+        @RequestMapping("/api/v1/staff/loanapp")
 public class LoanApplicationController {
 
 
@@ -58,6 +60,7 @@ public class LoanApplicationController {
             @RequestParam MultipartFile supportingDocument,
             @RequestParam Long clientId) {
 
+
         Optional<Client> clientOptional = clientRepository.findById(clientId);
         if (!clientOptional.isPresent()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Client not found.");
@@ -65,9 +68,7 @@ public class LoanApplicationController {
 
         Client client = clientOptional.get();
 
-        if (age <= 18 || age >= 66) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid age.");
-        }
+
 
 
         LoanApplication loanApplication = new LoanApplication();
@@ -98,6 +99,25 @@ public class LoanApplicationController {
 
         return ResponseEntity.ok("Loan application submitted successfully.");
     }
+
+
+    @PreAuthorize("hasRole('ROLE_CLIENT')")
+     @GetMapping("/getClient/{id}")
+     public ResponseEntity<?> getClient(@PathVariable Long id){
+         Optional<Client> clientOptional = clientRepository.findById(id);
+         if (!clientOptional.isPresent()) {
+             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Client not found.");
+         }
+         ClientResponseDTO dto= new ClientResponseDTO(
+                 clientOptional.get().getEmail(), clientOptional.get().getFirstname(),
+                 clientOptional.get().getLastname(),clientOptional.get().getProspect().getCustomer(), clientOptional.get().getPhone(),
+                 clientOptional.get().getBirthday(), clientOptional.get().getCin()
+
+
+         );
+
+         return ResponseEntity.ok(dto);
+     }
     @PreAuthorize("hasRole('ROLE_CC')")
     @GetMapping("/getAll/{id}")
     public ResponseEntity<List<LoanApplicationDTO>> getALlLoansByStaff(@PathVariable Long id) {
@@ -118,11 +138,32 @@ public class LoanApplicationController {
         return ResponseEntity.ok(loanApplicationsDTO);
     }
 
-    @GetMapping("/status/{id}")
-    public ResponseEntity<String> checkStatus(@PathVariable Long id) {
+    @GetMapping("/get/{id}")
+    public ResponseEntity<?> checkStatus(@PathVariable  Long id) {
         Optional<LoanApplication> loanApplication = loanApplicationRepository.findById(id);
         if (loanApplication.isPresent()) {
-            return ResponseEntity.ok("Application Status: " + loanApplication.get().getStatus());
+            LonaApplicationDetailsDTO dto = new LonaApplicationDetailsDTO(
+                    loanApplication.get().getId(),
+                    loanApplication.get().getStatus(),
+                    loanApplication.get().getCustomer(),
+                    loanApplication.get().getRequestedCreditAmount(),
+                    loanApplication.get().getApplicationDate(),
+                    loanApplication.get().getFullname(),
+                    loanApplication.get().getNationalite(),
+                    loanApplication.get().getAge(),
+                    loanApplication.get().getExperienceDuration(),
+                    loanApplication.get().getLoanPurpose(),
+                    loanApplication.get().getProductName(),
+                    loanApplication.get().getGovernorat(),
+                    loanApplication.get().getActivityAdresse(),
+                    loanApplication.get().getActivitytype(),
+                    loanApplication.get().getCreatedAt(),
+                    loanApplication.get().getValidatedAt(),
+                    loanApplication.get().getSupportingDocument()
+
+            );
+
+            return ResponseEntity.ok(dto);
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Loan application not found.");
         }

@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class LoginResponse {
 
-
+	private Long  id;
 	private String username;
 
 	private String email;
