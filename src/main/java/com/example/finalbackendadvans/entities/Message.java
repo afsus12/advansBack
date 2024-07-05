@@ -26,7 +26,8 @@ public class Message {
     @ManyToOne
     @JoinColumn(name = "staff_id")
     private Staff staff;
-
+    @Column(name = "from_id")
+    private Long from; // Added
     private String content;
     private Date timestamp;
 

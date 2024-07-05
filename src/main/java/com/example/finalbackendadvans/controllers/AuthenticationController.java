@@ -2,10 +2,13 @@ package com.example.finalbackendadvans.controllers;
 
 
 import com.example.finalbackendadvans.dto.*;
+import com.example.finalbackendadvans.entities.Client.Client;
+import com.example.finalbackendadvans.repositories.ClientRepository;
 import com.example.finalbackendadvans.repositories.ProspectRepository;
 import com.example.finalbackendadvans.services.AuthenticationService;
 import com.example.finalbackendadvans.services.ProspectService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -27,6 +30,8 @@ import java.util.stream.Collectors;
 public class AuthenticationController {
     private  final AuthenticationService service;
     private  final ProspectService prospectService;
+    @Autowired
+    private ClientRepository clientRepository;
     @PostMapping("/cc/signin")
     public  ResponseEntity<?> authenticateStaff(@Valid @RequestBody LoginRequest loginRequest) {
         try {
@@ -53,6 +58,7 @@ public class AuthenticationController {
         return ResponseEntity.ok(service.registerStaff(signUpRequest));
 
     }
+
     @PostMapping("/client/signup")
     public ResponseEntity<?> registerClient(@Valid @RequestBody ClientSignUpRequest signUpRequest) {
 
@@ -67,7 +73,7 @@ public class AuthenticationController {
     @GetMapping("/cc/{customer}")
     public ResponseEntity<?> getProspect( @PathVariable String customer) {
 
-        return ResponseEntity.ok(prospectService.getProspectsByCustomerCode(customer));
+        return prospectService.getProspectsByCustomerCode(customer);
 
     }
 

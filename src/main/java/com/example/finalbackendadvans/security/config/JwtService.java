@@ -57,7 +57,10 @@ return  Jwts.builder().setClaims(extraClaims).setSubject(userDetails.getUsername
     }
 
     private boolean isTokenExpired(String token) {
-        return extractExpiration(token).before(new Date());
+        Date expiration = extractExpiration(token);
+        Date now = new Date(System.currentTimeMillis() + 30000);
+
+        return extractExpiration(token).before(now);
     }
 
     private Date extractExpiration(String token) {

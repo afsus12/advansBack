@@ -1,6 +1,7 @@
 package com.example.finalbackendadvans.dto;
 
 import com.example.finalbackendadvans.entities.Client.LoanApplication;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Lob;
@@ -8,8 +9,11 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.core.io.Resource;
 
 import java.util.Date;
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -23,6 +27,7 @@ public class LonaApplicationDetailsDTO {
     private String Fullname;
     private String nationalite;
     private int age;
+
     private String experienceDuration;
     private String loanPurpose;
     private String productName;
@@ -35,9 +40,9 @@ public class LonaApplicationDetailsDTO {
 
     private Date createdAt;
     private Date validatedAt;
+    private Long clientId;
 
-    @Lob
-    private byte[] supportingDocument;
+    private List<String> documentPaths;
 
 
     public enum Status {

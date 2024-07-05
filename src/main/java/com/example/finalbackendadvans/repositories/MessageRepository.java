@@ -7,5 +7,4 @@ import java.util.List;
 
 public interface MessageRepository extends JpaRepository<Message, Long> {
     List<Message> findByClientId(Long clientId);
-    List<Message> findByStaffId(Long staffId);
-}
+    List<Message> findByStaffId(Long staffId);}

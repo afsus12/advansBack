@@ -1,5 +1,6 @@
 package com.example.finalbackendadvans.entities.Client;
 
+import com.example.finalbackendadvans.entities.Loan;
 import com.example.finalbackendadvans.entities.Staff;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
@@ -9,6 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Getter
@@ -43,8 +45,8 @@ public class LoanApplication {
     private Date createdAt;
     private Date validatedAt;
 
-    @Lob
-    private byte[] supportingDocument;
+    @ElementCollection
+    private List<String> supportingDocumentPaths;
 
     @ManyToOne
     @JoinColumn(name = "client_id", referencedColumnName = "id")
@@ -53,9 +55,10 @@ public class LoanApplication {
     @JoinColumn(name = "staff_id", referencedColumnName = "id")
     @JsonBackReference
     private Staff staff;
-
+    @OneToOne(mappedBy = "loanApplication")
+    private Loan loan;
     public enum Status {
-            REFUSED, IN_PROGRESS, STEP1_VERIFIED, FULLY_VERIFIED
+            REFUSED, IN_PROGRESS, STEP1_VERIFIED, FULLY_VERIFIED,COMPLETED
         }
 
         @PrePersist

@@ -20,4 +20,5 @@ public class LoanApplicationDTO {
     private double requestedCreditAmount;
     private Date applicationDate;
     private String Fullname;
+    private String productName;
 }

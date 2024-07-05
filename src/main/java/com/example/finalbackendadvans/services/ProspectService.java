@@ -6,6 +6,9 @@ import com.example.finalbackendadvans.repositories.AppUserRepository;
 import com.example.finalbackendadvans.repositories.ProspectRepository;
 import com.example.finalbackendadvans.repositories.StaffRepository;
 import jakarta.mail.MessagingException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -18,6 +21,11 @@ public class ProspectService {
     private final sendEmailService sendEmailService;
 
     private final StaffRepository staffRepository;
+
+    public Page<Prospect> getFilteredProspects(Long userCode,  String firstname, String lastname, String customer, Pageable pageable) {
+        return prospectRepository.findByUserCodeAndFirstnameContainingAndLastnameContainingAndCustomerContaining(userCode,
+                firstname, lastname, customer, pageable);
+    }
     public  ProspectService(ProspectRepository prospectRepository ,StaffRepository staffRepository,sendEmailService sendEmailService){
         this.prospectRepository=prospectRepository;
 
@@ -40,9 +48,10 @@ public class ProspectService {
     public ResponseEntity<?> getProspectsByCustomerCode(String customer) {
         Prospect prospect=prospectRepository.findProspectByCustomer(customer);
         if(prospect==null){
-            return ResponseEntity.badRequest().body("Not Found");
+
+            return new ResponseEntity<>("not Found", HttpStatus.NOT_FOUND);
         }
-        return ResponseEntity.ok().body(prospect);
+        return new ResponseEntity<>(prospect, HttpStatus.OK);
     }
     public List<Prospect> getProspectsByStaffId(Long userCode) {
         return prospectRepository.findAllByStaffId(userCode);

@@ -1,5 +1,6 @@
 package com.example.finalbackendadvans.dto;
 
+import com.example.finalbackendadvans.entities.Client.Status;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,7 +18,7 @@ public class ClientResponseDTO {
 
     private String lastname;
    private  String customer;
-
+   private Status status;
     private String phone;
     private Date birthday;
     private String cin;
